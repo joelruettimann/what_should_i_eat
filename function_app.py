@@ -30,7 +30,7 @@ import logging
 from pydantic import BaseModel
 from typing import List
 
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage
 import base64
 
@@ -83,6 +83,10 @@ def process_image(req: func.HttpRequest) -> func.HttpResponse:
         original_filename = file.filename
         filename = f"{unique_id}_{original_filename}"
         file_path = os.path.join(UPLOAD_DIR, filename)
+
+        # Create folder if it doesn't exist
+        if not os.path.isfile(UPLOAD_DIR):
+            os.makedirs(UPLOAD_DIR)
 
         # Save file temporarily
         # Save file temporarily
