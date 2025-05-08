@@ -85,7 +85,7 @@ def process_image(req: func.HttpRequest) -> func.HttpResponse:
         file_path = os.path.join(UPLOAD_DIR, filename)
 
         # Create folder if it doesn't exist
-        if not os.path.isfile(UPLOAD_DIR):
+        if not os.path.isdir(UPLOAD_DIR):
             os.makedirs(UPLOAD_DIR)
 
         # Save file temporarily
