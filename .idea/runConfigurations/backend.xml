@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="backend" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="func start" />
+    <option name="SCRIPT_TEXT" value="func start --verbose" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="func" />
     <option name="SCRIPT_OPTIONS" value="start" />

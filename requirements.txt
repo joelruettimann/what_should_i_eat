@@ -2,8 +2,13 @@
 # The Python Worker is managed by Azure Functions platform
 # Manually managing azure-functions-worker may cause unexpected issues
 
+# Backend
 azure-functions
 openai
 langchain
 langchain-openai
 pydantic
+
+# Frontend
+streamlit
+pillow

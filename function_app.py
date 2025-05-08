@@ -85,8 +85,7 @@ def process_image(req: func.HttpRequest) -> func.HttpResponse:
         file_path = os.path.join(UPLOAD_DIR, filename)
 
         # Create folder if it doesn't exist
-        if not os.path.isdir(UPLOAD_DIR):
-            os.makedirs(UPLOAD_DIR)
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
 
         # Save file temporarily
         # Save file temporarily
@@ -100,7 +99,7 @@ def process_image(req: func.HttpRequest) -> func.HttpResponse:
             image_base64 =  base64.b64encode(image_file.read()).decode('utf-8')
 
         # Example usage: Replace 'path/to/your/image.jpg' with the actual path to your image
-        
+
         base64_data = "your_base64_string_here"  # Make sure it doesn't include the data prefix
         image_message = {
             "type": "image_url",
@@ -121,20 +120,20 @@ def process_image(req: func.HttpRequest) -> func.HttpResponse:
 
         # Get response from LLM
         ai_message_description = model([HumanMessage(content=[text_message, image_message])])
-        
+
         prompt_for_suggestion = {
             "type": "text",
             "text": f'{prompt} This is the description {ai_message_description.content}'
         }
-        
+
         ai_message = model([HumanMessage(content=prompt_for_suggestion["text"])])
-        
+
         #ai_message = model(langchain_messages)
         messages =  [
-                    {"role": "user", "content": prompt_for_suggestion["text"]},
-                    {"role": "ai", "content": ai_message.content}
-                ]
-        
+            {"role": "user", "content": prompt_for_suggestion["text"]},
+            {"role": "ai", "content": ai_message.content}
+        ]
+
         prompt_for_suggestion = {
             "type": "text",
             "text": prompt
@@ -171,20 +170,20 @@ async def chat(req: func.HttpRequest) -> func.HttpResponse:
             "ai": AIMessage
         }
 
-        
+
         langchain_messages = [
             role_to_message[msg["role"]](content=msg["content"])
             for msg in request.messages
         ]
 
-        
+
         langchain_messages.append(HumanMessage(content=request.user_message))
 
         # Get response from LLM
         ai_message = model(langchain_messages)
-        
-        
-        
+
+
+
         return func.HttpResponse(
             ChatResponse(
                 response=ai_message.content,
