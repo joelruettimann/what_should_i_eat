@@ -29,8 +29,8 @@ import azure.functions as func
 import logging
 from pydantic import BaseModel
 from typing import List
-
-from langchain_openai import ChatOpenAI
+import json
+from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage, SystemMessage
 import base64
 
@@ -138,7 +138,17 @@ def process_image(req: func.HttpRequest) -> func.HttpResponse:
             "type": "text",
             "text": prompt
         }
-        os.remove(file_path)
+
+        # Save the JSON dump including the image ID
+        json_dump_path = os.path.join(UPLOAD_DIR, f"{unique_id}_data.json")
+        with open(json_dump_path, "w") as json_file:
+            json.dump({
+                "image_id": unique_id,
+                "description": ai_message_description.content,
+                "suggestion": ai_message.content
+            }, json_file)
+
+        #os.remove(file_path)
         return func.HttpResponse(
             ChatResponse(
                 response="",
@@ -148,7 +158,7 @@ def process_image(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="application/json"
         )
     except Exception as e:
-        os.remove(file_path)
+        #os.remove(file_path)
         logging.error(f"Error processing image: {e}")
         return func.HttpResponse(f"Error: {str(e)}", status_code=500)
 
