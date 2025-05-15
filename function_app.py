@@ -37,7 +37,7 @@ import base64
 
 # Currently using the following model has to be replaced with the one above
 model = ChatOpenAI(
-    openai_api_key="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",
+    openai_api_key="your key",
     model="gpt-4o",  # Specify the OpenAI model you want to use
     temperature=1.2
 )
